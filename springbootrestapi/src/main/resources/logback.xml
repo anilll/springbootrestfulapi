@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true" scan="false">
+	<contextName>springbootrestapi</contextName>
+	<jmxConfigurator /> 
+	<!-- SYSLOG APPENDER -->
+	<appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
+		<facility>${syslog.facility:-LOCAL1}</facility>
+		<suffixPattern>[%thread] %logger %msg</suffixPattern>
+	</appender>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<!-- <pattern>%date %level [%thread] [%-30file:%4line] -	&lt;&lt;%msg&gt;&gt;%n</pattern> -->
+			<pattern>%date %contextName %level [%thread] [%file:%line] - &lt;&lt;%msg&gt;&gt;%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+  	<!-- TO TURN OFF ROOT LOGGER REPLACE WITH THIS: <root level="${logger.default.level:-OFF}"> -->
+  	<root level="INFO">
+		<appender-ref ref="STDOUT" />	
+		<appender-ref ref="SYSLOG" />	
+	</root>
+
+	<!-- INCLUDE SPECIFIC ENVIRONMENT LOGGER -->
+	<!-- <include resource="logback-${env:-local}.xml" />  We need to pass the jvm argument to get the logback file dynamically--> 
+	<include resource="logback-dev.xml" />
+</configuration>

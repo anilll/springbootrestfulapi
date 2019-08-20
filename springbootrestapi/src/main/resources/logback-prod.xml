@@ -1,0 +1,58 @@
+﻿<!-- Override file for multi-envs (dev, qa, sit, etc) -->
+<included>
+
+	<!-- Rolling file appender for most of the application's logging -->
+	<appender name="ROLLING_FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<append>true</append>
+		<file>home/trace/application.log</file>  <!-- some server log path need to provide TO DO Anil-->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily roll-over -->
+			<fileNamePattern>home/trace/application-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+			<!-- and keep 7 days worth of history -->
+      		<maxHistory>7</maxHistory>
+			<!-- Or roll-over when file size reaches 25MB -->
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>25MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<!-- <pattern>%d{HH:mm:ss.SSS} %-3level [%thread] [%class{36}:%L] %M &lt;&lt;%msg&gt;&gt;%n</pattern> -->
+			<pattern>%date %contextName %level [%thread] [%file:%line] - &lt;&lt;%msg&gt;&gt;%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<!-- Rolling file appender for SQL queries logging -->
+	<appender name="ROLLING_FILE_APPENDER_SQL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<append>true</append>
+		<file>home/trace/application_sql.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily roll-over -->
+			<fileNamePattern>home/trace/application_sql-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+			<!-- and keep 7 days worth of history -->
+      		<maxHistory>7</maxHistory>
+			<!-- Or roll-over when file size reaches 25MB -->
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>25MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<!-- <pattern>%d{HH:mm:ss.SSS} %-3level [%thread] [%class{36}:%L] %M &lt;&lt;%msg&gt;&gt;%n</pattern> -->
+			<pattern>%date %contextName %level [%thread] [%file:%line] - &lt;&lt;%msg&gt;&gt;%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<logger name="org.hibernate.SQL" level="WARN" additivity="false">
+		<appender-ref ref="ROLLING_FILE_APPENDER_SQL"/>
+	</logger>
+
+	<logger name="org.hibernate.type" level="WARN" additivity="false">
+		<appender-ref ref="ROLLING_FILE_APPENDER_SQL"/>
+	</logger>
+
+	<logger name="com.freedom.financial.network.springbootrestapi" level="DEBUG" additivity="false">
+		<appender-ref ref="ROLLING_FILE_APPENDER" />
+	</logger>
+
+</included>
